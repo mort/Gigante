@@ -6,7 +6,8 @@ module Gigante
 
   class ServiceNotImplemented < StandardError; end
   class ServiceBadlyImplemented < StandardError; end
-  
+  class UnknownService < StandardError; end
+    
   require 'gigante/services'
   require 'gigante/search'
   

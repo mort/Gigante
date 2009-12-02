@@ -16,8 +16,13 @@ module Gigante
     
     def search(lat = '-5.851560', lon = '43.366241', radius = 1, services = [], *options)
       @results = {}
-      @services = services.any? ? services.select{|s| @available_services.include?(s) } : @available_services
-      @services.each do |s|
+      services = services.any? ? services : @available_services
+      
+      services.each do |s|
+        raise UnknownService, "Service #{s} is unknown" unless @available_services.include?(s)
+      end
+      
+      services.each do |s|
         results = Gigante::Services.const_get(s.capitalize).search(lat, lon, radius)
         @results[s.to_sym] = results
       end

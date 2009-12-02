@@ -26,14 +26,29 @@ class TestGigante < Test::Unit::TestCase
     
   end
 
+  context 'a search with unknown services' do
+    setup do
+      Gigante::Services::AVAILABLE_SERVICES = %w(oos)
+      @g = Gigante::Search.new
+    end
+    
+    should 'raise an UnknownService exception' do
+      assert_raise Gigante::UnknownService do
+        @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
+        @results = @g.search(@lat,@lon,@radius,['wadus'])
+      end
+    end
+    
+  end
+  
 
   context 'a search' do
     setup do
-      lat, lon, radius = ['-5.851560', '43.366241', 1]
+      @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
       Gigante::Services::AVAILABLE_SERVICES = %w(oos)
-      mock(Gigante::Services::Oos).search(lat,lon,radius) { 'foo' } 
+      mock(Gigante::Services::Oos).search(@lat,@lon,@radius) { 'foo' } 
       @g = Gigante::Search.new
-      @results = @g.search
+      @results = @g.search(@lat,@lon,@radius, ['oos'])
     end
     
     should 'return a hash of results' do
