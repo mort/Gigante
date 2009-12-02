@@ -29,9 +29,9 @@ class TestGigante < Test::Unit::TestCase
 
   context 'a search' do
     setup do
-      lat, lon, radius = 
+      lat, lon, radius = ['-5.851560', '43.366241', 1]
       Gigante::Services::AVAILABLE_SERVICES = %w(oos)
-      mock(Gigante::Services::Oos).search { 'foo' } 
+      mock(Gigante::Services::Oos).search(lat,lon,radius) { 'foo' } 
       @g = Gigante::Search.new
       @results = @g.search
     end
