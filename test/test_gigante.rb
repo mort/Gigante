@@ -33,7 +33,7 @@ class TestGigante < Test::Unit::TestCase
     end
     
     should 'raise an UnknownService exception' do
-      assert_raise Gigante::UnknownService do
+      assert_raise Gigante::Errors::UnknownService do
         @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
         @results = @g.search(@lat,@lon,@radius,['wadus'])
       end
@@ -41,13 +41,29 @@ class TestGigante < Test::Unit::TestCase
     
   end
   
-
-  context 'a search' do
+  context 'a search without auth credentials for a service' do
     setup do
+      Gigante::Services::AVAILABLE_SERVICES = %w(oos)
+      @g = Gigante::Search.new
+    end
+    
+    should 'raise a ServiceAuthMissing exception' do
+      assert_raise Gigante::Errors::ServiceAuthMissing do
+        @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
+        @results = @g.search(@lat,@lon,@radius,['oos'])
+      end
+    end
+    
+  end
+
+  context 'a valid search' do
+    setup do
+      options = {}
+      options[:oos] = {:auth => 'foo'}
       @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
       Gigante::Services::AVAILABLE_SERVICES = %w(oos)
-      mock(Gigante::Services::Oos).search(@lat,@lon,@radius) { 'foo' } 
-      @g = Gigante::Search.new
+      mock(Gigante::Services::Oos).search(@lat,@lon,@radius, options[:oos]) { 'foo' } 
+      @g = Gigante::Search.new(options)
       @results = @g.search(@lat,@lon,@radius, ['oos'])
     end
     
