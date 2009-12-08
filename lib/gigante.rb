@@ -4,9 +4,13 @@ $:.unshift(File.dirname(__FILE__)) unless
 module Gigante
   VERSION = '0.0.1'
 
-  class ServiceNotImplemented < StandardError; end
-  class ServiceBadlyImplemented < StandardError; end
-  class UnknownService < StandardError; end
+  module Errors
+    class ServiceNotImplemented < StandardError; end
+    class ServiceBadlyImplemented < StandardError; end
+    class UnknownService < StandardError; end
+    class ServiceAuthMissing < StandardError; end
+    class ServiceForbidden < StandardError; end
+  end  
     
   require 'gigante/services'
   require 'gigante/search'
