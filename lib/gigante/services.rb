@@ -38,13 +38,13 @@ module Gigante
         url = "http://api.flickr.com/services/rest/?#{query_string}"
         response = HTTParty.get(url)
 
-        return response
+        return build_results(response)
 
       end
 
       private
 
-      def build_query_string(api_key, lat, lon, radius)
+      def self.build_query_string(api_key, lat, lon, radius)
          query_params = {}
           query_params[:method] = 'flickr.photos.search'
           query_params[:api_key] = api_key
@@ -55,14 +55,18 @@ module Gigante
           query_params[:format] = 'json'
           query_params[:nojsoncallback] = 1
 
-          query_string = ''
-
-          query_params.each_pair do |k,v|
-            query_string << "#{k}=#{v}"
-          end
+          query_string = query_params.map do |k,v|
+            "#{k}=#{v}"
+          end.sort.join('&')
 
           query_string
       end
+      
+      def self.build_results(response)
+        
+      end
+      
+      
     end
   
   
