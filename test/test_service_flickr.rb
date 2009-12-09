@@ -34,72 +34,72 @@ class TestServiceFlickr < Test::Unit::TestCase
     end
     
     should 'have a meta key' do
-      assert @r[:meta]
+      assert @r['meta']
     end
     
     should 'have a meta/service name key' do
-      assert @r[:meta][:service_name]
+      assert @r['meta']['service_name']
     end
     
     should 'have a meta/service description key' do
-      assert @r[:meta][:service_description]
+      assert @r['meta']['service_description']
     end
     
     should 'have a meta/service url key' do
-      assert @r[:meta][:service_url]
+      assert @r['meta']['service_url']
     end
 
     should 'have a meta/service api url key' do
-      assert @r[:meta][:service_api_url]
+      assert @r['meta']['service_api_url']
     end
 
     should 'have a search key' do
-      assert @r[:search]
+      assert @r['search']
     end
     
     should 'have a search status key' do
-      assert @r[:search][:status]
+      assert @r['search']['status']
     end
     
     should 'have a search/results key' do
-      assert @r[:search][:results]
+      assert @r['search']['results']
     end
     
     should 'have an array of results' do
-      assert @r[:search][:results].is_a?(Array)
+      assert @r['search']['results'].is_a?(Array)
     end
     
     should 'have a number of results' do
-      assert @r[:search][:results].size > 0
+      assert @r['search']['results'].size > 0
     end
     
     should 'have a valid result counter' do
-      assert @r[:search][:total_results] == @r[:search][:results].size
+      assert @r['search']['total_results'].to_i == @r['search']['results'].size
     end
     
     context 'each result' do
       setup do
-        @result = @r[:search][:results].first
+        @result = @r['search']['results'].first
       end
       
       should 'be a hash' do
         assert @result.is_a?(Hash)
       end
 
-      should 'have a name key' do
-        assert @result[:name]
+      should 'have a title key' do
+        assert @result['title']
       end
       
       should 'have a url key' do
-        assert @result[:url]
+        assert @result['url']
       end
       
       should 'have a lat key' do
-        assert @result[:lat]
+        assert @result['lat']
       end
       
       should 'have a lon key' do
-        assert @result[:lon]
+        assert @result['lon']
       end
       
     end

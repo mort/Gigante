@@ -29,6 +29,7 @@ module Gigante
       SERVICE_NAME = 'Flickr'
       SERVICE_URL  = 'http://flickr.com'
       SERVICE_API_URL = 'http://www.flickr.com/services/api/'
+      SERVICE_DESCRIPTION = 'Almost certainly the best online photo management and sharing application in the world'
 
       def self.search(lat, lon, radius, options) 
 
@@ -44,7 +45,7 @@ module Gigante
 
         results = build_results(response)
         
-        results
+        return results
 
       end
 
@@ -71,7 +72,7 @@ module Gigante
       def self.build_results(response)
         
         r = JSON.parse(response)
-        
+
         results = {}
         results[:meta] = {}
         results[:search] = {}
@@ -79,6 +80,7 @@ module Gigante
         results[:meta][:service_name]    = SERVICE_NAME
         results[:meta][:service_url]     = SERVICE_URL
         results[:meta][:service_api_url] = SERVICE_API_URL
+        results[:meta][:service_description] = SERVICE_DESCRIPTION
         
         results[:search][:status] = 'ok'
         
