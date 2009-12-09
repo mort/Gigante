@@ -25,6 +25,10 @@ module Gigante
       include ClassMethods
 
       AUTH_REQUIRED = true
+      
+      SERVICE_NAME = 'Flickr'
+      SERVICE_URL  = 'http://flickr.com'
+      SERVICE_API_URL = 'http://www.flickr.com/services/api/'
 
       def self.search(lat, lon, radius, options) 
 
@@ -38,7 +42,9 @@ module Gigante
         url = "http://api.flickr.com/services/rest/?#{query_string}"
         response = HTTParty.get(url)
 
-        return build_results(response)
+        results = build_results(response)
+        
+        results
 
       end
 
@@ -63,6 +69,41 @@ module Gigante
       end
       
       def self.build_results(response)
+        
+        r = JSON.parse(response)
+        
+        results = {}
+        results[:meta] = {}
+        results[:search] = {}
+        
+        results[:meta][:service_name]    = SERVICE_NAME
+        results[:meta][:service_url]     = SERVICE_URL
+        results[:meta][:service_api_url] = SERVICE_API_URL
+        
+        results[:search][:status] = 'ok'
+        
+        results[:search][:total_results] = r['photos']['total']
+        results[:search][:results] = []
+        
+        r['photos']['photo'].each do |photo|
+          node = {}
+          node[:lat] = photo['latitude']
+          node[:lon] = photo['longitude']
+          node[:title] = photo['title']
+          
+          farm_id = photo['farm']
+          server_id = photo['server']
+          id = photo['id']
+          secret = photo['secret']
+          
+          node[:url] = "http://farm#{farm_id}.static.flickr.com/#{server_id}/#{id}_#{secret}.jpg"
+          
+          results[:search][:results].push(node)
+          
+        end
+        
+        return results.to_json
+        
         
       end
       
