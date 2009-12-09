@@ -1,6 +1,6 @@
 module Gigante
   module Services
-    AVAILABLE_SERVICES = %w(flickr wikipedia)
+    AVAILABLE_SERVICES = %w(flickr wikipedia yelp)
     
     module ClassMethods
     
@@ -25,23 +25,7 @@ module Gigante
     AVAILABLE_SERVICES.each do |s|
       require File.dirname(__FILE__) + "/services/#{s}.rb"
     end
-  
-    class Oos
-      include ClassMethods
-      
-      AUTH_REQUIRED = true
-      
-      def self.search(lat, lon, radius, options = {}) 
-      end
-    end
-        
-    class Yelp
-      def self.search(lat, lon, radius) 
-      end
-    end
-    
-
-  
+          
   end
   
 end

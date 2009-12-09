@@ -38,7 +38,6 @@ module Gigante
           results[:search][:results] = []
 
           response['geonames']['entry'].each do |e|
-            print e['title'], e['lat'], e['lng']
           
             node = {}
             node[:lat]   = e['lat']
