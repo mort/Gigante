@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<geonames>
+<entry>
+<lang>en</lang>
+<title>Westminster Bridge</title>
+<summary>behind the tower of Big Ben. Seen from the London Eye observation wheel. . , 1835, with Westminster Bridge on the right. Westminster Bridge is a road and foot traffic bridge over the River Thames between Westminster and Lambeth, in London, England. The current bridge, opened in 1862, is the second on the site and replaced an earlier stone bridge that had opened in 1750, but which was (...)</summary>
+<feature>landmark</feature>
+<countryCode>GB</countryCode>
+<population>0</population>
+<elevation>0</elevation>
+<lat>51.5008</lat>
+<lng>-0.1217</lng>
+<wikipediaUrl>http://en.wikipedia.org/wiki/Westminster_Bridge</wikipediaUrl>
+<thumbnailImg>http://www.geonames.org/img/wikipedia/129000/thumb-128898-100.jpg</thumbnailImg>
+<distance>0.0519</distance>
+</entry>
+<entry>
+<lang>en</lang>
+<title>Westminster Millennium Pier</title>
+<summary>Westminster Millennium Pier is a pier on the River Thames, in the City of Westminster. It is operated by London River Services and served by various river transport and cruise operators. It is nearby the Palace of Westminster, Westminster tube station, and the statue to Boudica (...)</summary>
+<feature>landmark</feature>
+<countryCode>GB</countryCode>
+<population>0</population>
+<elevation>0</elevation>
+<lat>51.5019</lat>
+<lng>-0.1232</lng>
+<wikipediaUrl>http://en.wikipedia.org/wiki/Westminster_Millennium_Pier</wikipediaUrl>
+<thumbnailImg/>
+<distance>0.1234</distance>
+</entry>
+<entry>
+<lang>en</lang>
+<title>Clock Tower, Palace of Westminster</title>
+<summary>building in Westminster, London. It is often mistakenly called "Big Ben" — which is actually the main bell housed within the Clock Tower.[http://www.parliament.uk/about/history/big_ben/facts.cfm UK Parliament - The Clock Tower (Big Ben): Facts and figures] Accessed 13 July 2007[http://www.parliament.uk/about/images/exterior/bell (...)</summary>
+<feature>landmark</feature>
+<countryCode>GB</countryCode>
+<population>0</population>
+<elevation>0</elevation>
+<lat>51.5008</lat>
+<lng>-0.1244</lng>
+<wikipediaUrl>http://en.wikipedia.org/wiki/Clock_Tower%2C_Palace_of_Westminster</wikipediaUrl>
+<thumbnailImg>http://www.geonames.org/img/wikipedia/13000/thumb-12227-100.jpg</thumbnailImg>
+<distance>0.1415</distance>
+</entry>
+<entry>
+<lang>en</lang>
+<title>Palace of Westminster</title>
+<summary>The Palace of Westminster, also known as the Houses of Parliament or Westminster Palace, in London is where the two Houses of the Parliament of the United Kingdom (the House of Lords and the House of Commons) meet to conduct their business. The Palace lies on the north bank of the River Thames in the London borough of the City of Westminster, close by other government (...)</summary>
+<feature>landmark</feature>
+<countryCode>GB</countryCode>
+<population>0</population>
+<elevation>0</elevation>
+<lat>51.4994</lat>
+<lng>-0.1242</lng>
+<wikipediaUrl>http://en.wikipedia.org/wiki/Palace_of_Westminster</wikipediaUrl>
+<thumbnailImg>http://www.geonames.org/img/wikipedia/17000/thumb-16170-100.jpg</thumbnailImg>
+<distance>0.204</distance>
+</entry>
+<entry>
+<lang>en</lang>
+<title>Battle of Britain Monument in London</title>
+<summary>on the Victoria Embankment overlooking the River Thames in central London, England which pays tribute to those who took part in the Battle of Britain during World War II. It was unveiled on 18 September 2005, the 65th anniversary of the Battle, by His Royal Highnesses the Prince of Wales and Her Royal Highness the Duchess of Cornwall in the presence of many of the surviving airmen known (...)</summary>
+<feature/>
+<countryCode>  </countryCode>
+<population>0</population>
+<elevation>0</elevation>
+<lat>51.503</lat>
+<lng>-0.1234</lng>
+<wikipediaUrl>http://en.wikipedia.org/wiki/Battle_of_Britain_Monument_in_London</wikipediaUrl>
+<thumbnailImg/>
+<distance>0.2442</distance>
+</entry>
+</geonames>
