@@ -33,19 +33,23 @@ module Gigante
           results[:meta][:service_description] = SERVICE_DESCRIPTION
 
           results[:search][:status] = 'ok'
-
-          results[:search][:total_results] = response['geonames']['entry'].size
-          results[:search][:results] = []
-
-          response['geonames']['entry'].each do |e|
           
-            node = {}
-            node[:lat]   = e['lat']
-            node[:lon]   = e['lng']
-            node[:title] = e['title']
-            node[:url]   = e['wikipediaUrl']
+          unless response['geonames'].nil?
+            results[:search][:total_results] = response['geonames']['entry'].size
+            results[:search][:results] = []
+
+            response['geonames']['entry'].each do |e|
           
-            results[:search][:results].push(node)
+              node = {}
+              node[:lat]   = e['lat']
+              node[:lon]   = e['lng']
+              node[:title] = e['title']
+              node[:url]   = e['wikipediaUrl']
+          
+              results[:search][:results].push(node)
+            end
+          else
+            results[:search][:total_results] = 0
           end
 
           return results.to_json

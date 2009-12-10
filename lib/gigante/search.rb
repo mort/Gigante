@@ -32,7 +32,7 @@ module Gigante
         
         the_service =  Gigante::Services.const_get(s.capitalize)
         
-        raise Gigante::Errors::ServiceAuthMissing, "#{s.capitalize} requires authorization, but none provided" unless ((options and options[:auth]) or the_service.no_auth_required?)
+        raise Gigante::Errors::ServiceAuthMissing, "#{s.capitalize} requires authorization, but none provided" unless ((options and options[:auth]) or (the_service::AUTH_REQUIRED == false))
         
         results = the_service.search(lat, lon, radius, options)
         @results[s.to_sym] = results

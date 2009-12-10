@@ -56,7 +56,7 @@ class TestGigante < Test::Unit::TestCase
     
   end
 
-  context 'a valid search' do
+  context 'a valid search across all services' do
     setup do
       options = {}
       options[:flickr] = {:auth => 'foo'}
