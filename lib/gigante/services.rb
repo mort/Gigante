@@ -1,6 +1,6 @@
 module Gigante
   module Services
-    AVAILABLE_SERVICES = %w(flickr wikipedia yelp)
+    AVAILABLE_SERVICES = %w(flickr wikipedia yelp oos)
     
     module ClassMethods
     
