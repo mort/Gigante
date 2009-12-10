@@ -28,7 +28,7 @@ class TestGigante < Test::Unit::TestCase
 
   context 'a search with unknown services' do
     setup do
-      Gigante::Services::AVAILABLE_SERVICES = %w(oos)
+      Gigante::Services::AVAILABLE_SERVICES = %w(flickr)
       @g = Gigante::Search.new
     end
     
@@ -43,14 +43,14 @@ class TestGigante < Test::Unit::TestCase
   
   context 'a search without auth credentials for a service' do
     setup do
-      Gigante::Services::AVAILABLE_SERVICES = %w(oos)
+      Gigante::Services::AVAILABLE_SERVICES = %w(flickr)
       @g = Gigante::Search.new
     end
     
     should 'raise a ServiceAuthMissing exception' do
       assert_raise Gigante::Errors::ServiceAuthMissing do
         @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
-        @results = @g.search(@lat,@lon,@radius,['oos'])
+        @results = @g.search(@lat,@lon,@radius,['flickr'])
       end
     end
     
@@ -59,12 +59,12 @@ class TestGigante < Test::Unit::TestCase
   context 'a valid search' do
     setup do
       options = {}
-      options[:oos] = {:auth => 'foo'}
+      options[:flickr] = {:auth => 'foo'}
       @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
-      Gigante::Services::AVAILABLE_SERVICES = %w(oos)
-      mock(Gigante::Services::Oos).search(@lat,@lon,@radius, options[:oos]) { 'foo' } 
+      Gigante::Services::AVAILABLE_SERVICES = %w(flickr)
+      mock(Gigante::Services::Flickr).search(@lat,@lon,@radius, options[:flickr]) { 'foo' } 
       @g = Gigante::Search.new(options)
-      @results = @g.search(@lat,@lon,@radius, ['oos'])
+      @results = @g.search(@lat,@lon,@radius)
     end
     
     should 'return a hash of results' do
@@ -72,11 +72,11 @@ class TestGigante < Test::Unit::TestCase
     end
     
     should 'return a hash indexed by service name' do
-      assert @results.keys.include?('oos'.to_sym)
+      assert @results.keys.include?('flickr'.to_sym)
     end
     
     should 'return a hash that contains the results for that service' do
-      assert @results['oos'.to_sym] == 'foo', @results['oos'.to_sym]
+      assert @results['flickr'.to_sym] == 'foo', @results['flickr'.to_sym]
     end
     
   end
