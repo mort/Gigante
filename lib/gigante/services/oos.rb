@@ -3,7 +3,7 @@ module Gigante
    class Oos
      
      include ClassMethods
-     require 'oos4ruby'
+     require 'md5'
      require 'crack'
 
      AUTH_REQUIRED = true
@@ -21,22 +21,28 @@ module Gigante
        app_key = auth.delete(:app_key)
        app_secret = auth.delete(:app_secret)
        
-       oos = Oos4ruby::Oos.new
+       authSign = auth_sign(app_key, app_secret)
+       
+       url = "http://11870.com/api/v1/search?lat=#{lat}&lon=#{lon}&radius=#{radius}&appToken=#{app_key}&authSign=#{authSign}"
 
-       oos.auth_app app_key, app_secret
-
-       results = oos.search :lat => lat, :lon => lon, :radius => radius
-
+       response = HTTParty.get(url) 
+       
        results = build_results(response)
    
-       return results
-
+        
+       results  
+     end
+     
+     def self.auth_sign(app_key, app_secret)
+       Digest::MD5.hexdigest("#{app_key}#{app_secret}")
      end
      
      private 
      
      def self.build_results(response)
 
+       r = Crack::XML.parse(response)
+       
        results = {}
        results[:meta] = {}
        results[:search] = {}
@@ -47,7 +53,27 @@ module Gigante
        results[:meta][:service_description] = SERVICE_DESCRIPTION
    
        results[:search][:status] = 'ok'
+       results[:search][:results] = []
+       results[:search][:total_results] = r['feed']['entry'].size
+       
 
+       r['feed']['entry'].each do |e|
+         lat, lon =  e['georss:where']['gml:Point']['gml:pos'].split(' ')
+         
+         node = {}
+         node[:lat]   = lat
+         node[:lon]   = lon
+         node[:title] = e['title']
+         
+         u = e['link'].is_a?(Hash) ? e['link'] : e['link'].first
+         
+         node[:url] = u['href']
+         
+         results[:search][:results].push(node)
+        
+       end
+       
+       return results
         
      end
      
