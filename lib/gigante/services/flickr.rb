@@ -3,6 +3,8 @@ module Gigante
     class Flickr
       include ClassMethods
 
+      require 'base58'
+
       AUTH_REQUIRED = true
       
       REQUIRED_AUTH_PARAMS = %w(api_key)
@@ -33,6 +35,9 @@ module Gigante
       private
 
       def self.build_query_string(api_key, lat, lon, radius)
+        
+         radius = 32 if (radius > 32)
+        
          query_params = {}
           query_params[:method] = 'flickr.photos.search'
           query_params[:api_key] = api_key
@@ -79,8 +84,8 @@ module Gigante
           id = photo['id']
           secret = photo['secret']
       
-          node[:url] = "http://farm#{farm_id}.static.flickr.com/#{server_id}/#{id}_#{secret}.jpg"
-      
+          #node[:url] = "http://farm#{farm_id}.static.flickr.com/#{server_id}/#{id}_#{secret}.jpg"
+          node[:url] = "http://flic.kr/p/#{Base58.int_to_base58(id.to_i)}"
           results[:search][:results].push(node)
       
         end
