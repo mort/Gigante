@@ -82,23 +82,31 @@ class TestGigante < Test::Unit::TestCase
       @results = @g.find(@lat,@lon,@radius)
     end
     
-    context 'well formed results' do
-      setup do
-        @r = JSON.parse(@results)
-      end
-      should 'be a hash' do
-        assert @r.is_a?(Hash)
-      end
-
-      should 'be indexed by service name' do
-        assert @r.keys.include?('flickr'), @r.inspect
-      end
-
-      should 'return a hash that contains the results for that service' do
-        assert @r['flickr'] == 'foo', @r.inspect
-      end
+    
+    should 'be a hash' do
+      assert @results.is_a?(Hash)
     end
     
+    should 'return info about the search' do
+      assert @results.keys.include?(:meta)
+    end
+    
+    should 'return search results' do
+      assert @results.keys.include?(:results)
+    end
+    
+    should 'return coordinates and radius' do
+      assert @results[:meta][:parameters] ==  {:lat => '-5.851560', :lon => '43.366241', :radius => 1}, @results[:meta].inspect
+    end
+
+    should 'be indexed by service name' do
+      assert @results[:results].keys.include?(:flickr), @results.inspect
+    end
+
+    should 'return a hash that contains the results for that service' do
+      assert @results[:results][:flickr] == 'foo', @results.inspect
+    end
+  
     
   end
  

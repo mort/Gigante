@@ -33,6 +33,11 @@ module Gigante
     
     def find(lat = '-5.851560', lon = '43.366241', radius = 1, services = nil, *options)
       @results = {}
+      @results[:meta] = {}
+      @results[:meta][:parameters] = {:lat => lat, :lon => lon, :radius => radius}
+      @results[:results] = {}
+      
+      
       services ||= @available_services
       
       services.each do |s|
@@ -49,11 +54,10 @@ module Gigante
         raise Gigante::Errors::ServiceAuthMissing, "#{s.capitalize} requires authorization, but none provided" unless ((options and options[:auth]) or (the_service::AUTH_REQUIRED == false))
         
         results = the_service.find(lat, lon, radius, options)
-        @results[s.to_sym] = results
+        @results[:results][s.to_sym] = results
       end
       
-      @results.to_json
-
+      @results
     end
     
   end
