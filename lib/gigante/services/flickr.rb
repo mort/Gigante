@@ -4,13 +4,15 @@ module Gigante
       include ClassMethods
 
       AUTH_REQUIRED = true
-  
+      
+      REQUIRED_AUTH_PARAMS = %w(api_key)
+      
       SERVICE_NAME = 'Flickr'
       SERVICE_URL  = 'http://flickr.com'
       SERVICE_API_URL = 'http://www.flickr.com/services/api/'
       SERVICE_DESCRIPTION = 'Almost certainly the best online photo management and sharing application in the world'
 
-      def self.search(lat, lon, radius, options) 
+      def self.find(lat, lon, radius, options) 
 
         auth = options.delete(:auth)
         raise Gigante::Errors::ServiceForbidden, "You must supply a Flickr API key via the auth hash" unless (auth and auth[:api_key])
@@ -83,7 +85,7 @@ module Gigante
       
         end
     
-        return results.to_json
+        return results
     
     
       end

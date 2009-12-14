@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<geonames>
+<entry>
+<lang>en</lang>
+<title>Kingdom of Asturias</title>
+<summary>The Kingdom of Asturias was the first Christian political entity to be established in the Iberian peninsula after the collapse of the Visigothic Kingdom. This followed the defeat of King Roderic at the Battle of Guadalete and the subsequent Islamic conquest of Hispania.  (...)</summary>
+<feature/>
+<countryCode>  </countryCode>
+<population>0</population>
+<elevation>0</elevation>
+<lat>43.3625</lat>
+<lng>-5.8431</lng>
+<wikipediaUrl>http://en.wikipedia.org/wiki/Kingdom_of_Asturias</wikipediaUrl>
+<thumbnailImg/>
+<distance>0.6136</distance>
+</entry>
+</geonames>

@@ -4,13 +4,15 @@ module Gigante
       include ClassMethods
 
        AUTH_REQUIRED = true
+       
+       REQUIRED_AUTH_PARAMS = %w(api_key)
 
        SERVICE_NAME = 'Yelp'
        SERVICE_URL  = 'http://yelp.com'
        SERVICE_API_URL = 'http://www.yelp.com/developers/documentation/search_api'
        SERVICE_DESCRIPTION = 'Real people. Real reviews.'
 
-       def self.search(lat, lon, radius, options)
+       def self.find(lat, lon, radius, options)
          auth = options.delete(:auth)
          raise Gigante::Errors::ServiceForbidden, "You must supply a Yelp API key via the auth hash" unless (auth and auth[:api_key])
          api_key = auth.delete(:api_key)
@@ -40,6 +42,7 @@ module Gigante
 
          r['businesses'].each do |b|
            node = {}
+           
            node[:lat]   = b['latitude']
            node[:lon]   = b['longitude']
            node[:title] = b['name']
@@ -49,7 +52,7 @@ module Gigante
 
          end
 
-         return results.to_json
+         return results
        end
     end
   end

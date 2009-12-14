@@ -7,67 +7,72 @@ class TestServiceOos < Test::Unit::TestCase
     should 'raise an exception' do
       assert_raise Gigante::Errors::ServiceForbidden do
         @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
-        Gigante::Services::Oos.search(@lat,@lon,@radius,{})
+        Gigante::Services::Oos.find(@lat,@lon,@radius,{})
       end
     end
   
   end
   
-  # context 'a valid search without results' do
-  #     setup do
-  #       
-  #       response = File.read(File.dirname(__FILE__)+'/fixtures/oos_response_no_results.txt')
-  #         
-  #       @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
-  #       url = "http://api.flickr.com/services/rest/?api_key=wadus&extras=geo&format=json&lat=#{@lat}&lon=#{@lon}&method=flickr.photos.search&nojsoncallback=1&radius=#{@radius}"
-  #       mock(HTTParty).get(url){response}
-  #       @results = Gigante::Services::Flickr.search(@lat, @lon, @radius, :auth => {:api_key => 'wadus'})
-  #       @r = JSON.parse(@results)
-  #     end
-  # 
-  #     should 'return results' do
-  #       assert !@results.nil?
-  #     end
-  #     
-  #     should 'return a hash' do
-  #       assert @r.is_a?(Hash)
-  #     end
-  #     
-  #     should 'have a meta key' do
-  #       assert @results['meta']
-  #     end
-  #     
-  #     should 'have a meta/service name key' do
-  #       assert @results['meta']['service_name']
-  #     end
-  #     
-  #     should 'have a meta/service description key' do
-  #       assert @results['meta']['service_description']
-  #     end
-  #     
-  #     should 'have a meta/service url key' do
-  #       assert @results['meta']['service_url']
-  #     end
-  # 
-  #     should 'have a meta/service api url key' do
-  #       assert @results['meta']['service_api_url']
-  #     end
-  # 
-  #     should 'have a search key' do
-  #       assert @results['search']
-  #     end
-  #     
-  #     should 'have a search status key' do
-  #       assert @results['search']['status']
-  #     end
-  #     
-  #     
-  #     should 'have a valid result counter of zero' do
-  #       assert @results['search']['total_results'] = 0
-  #     end
-  #     
-  #     
-  #   end
+   context 'a valid search without results' do
+       setup do
+         
+         response = File.read(File.dirname(__FILE__)+'/fixtures/oos_response_no_results.txt')
+         app_key = 'wadus'
+         app_secret = 'wadus'
+
+         mock(Gigante::Services::Oos).auth_sign(app_key, app_secret){'wadus'}
+
+         lat, lon, radius = ['-5.851560', '43.366241', 1]
+
+         url = "http://11870.com/api/v1/search?lat=#{lat}&lon=#{lon}&radius=#{radius}&appToken=#{app_key}&authSign=wadus"
+         mock(HTTParty).get(url){response}
+
+         @results = Gigante::Services::Oos.find(lat, lon, radius, :auth => {:app_key => app_key, :app_secret => app_secret})
+      end
+   
+       should 'return results' do
+         assert !@results.nil?
+       end
+       
+       should 'return a hash' do
+         assert @results.is_a?(Hash)
+       end
+       
+       should 'have a meta key' do
+         assert @results[:meta]
+       end
+       
+       should 'have a meta/service name key' do
+         assert @results[:meta][:service_name]
+       end
+       
+       should 'have a meta/service description key' do
+         assert @results[:meta][:service_description]
+       end
+       
+       should 'have a meta/service url key' do
+         assert @results[:meta][:service_url]
+       end
+   
+       should 'have a meta/service api url key' do
+         assert @results[:meta][:service_api_url]
+       end
+   
+       should 'have a search key' do
+         assert @results[:search]
+       end
+       
+       should 'have a search status key' do
+         assert @results[:search][:status]
+       end
+       
+       
+       should 'have a valid result counter of zero' do
+         assert @results[:search][:total_results] = 0
+       end
+       
+       
+     end
   
   context 'a valid search with results' do
     setup do
@@ -82,8 +87,7 @@ class TestServiceOos < Test::Unit::TestCase
       url = "http://11870.com/api/v1/search?lat=#{lat}&lon=#{lon}&radius=#{radius}&appToken=#{app_key}&authSign=wadus"
       mock(HTTParty).get(url){response}
 
-      @results = Gigante::Services::Oos.search(lat, lon, radius, :auth => {:app_key => app_key, :app_secret => app_secret})
-      puts @results.inspect
+      @results = Gigante::Services::Oos.find(lat, lon, radius, :auth => {:app_key => app_key, :app_secret => app_secret})
     end
 
     should 'return results' do

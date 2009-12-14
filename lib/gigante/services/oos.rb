@@ -3,17 +3,20 @@ module Gigante
    class Oos
      
      include ClassMethods
+     require 'rubygems'
      require 'md5'
      require 'crack'
 
      AUTH_REQUIRED = true
+     
+     REQUIRED_AUTH_PARAMS = %w(app_key app_secret)
  
      SERVICE_NAME = '11870'
      SERVICE_URL  = 'http://11870.com'
      SERVICE_API_URL = 'http://code.google.com/p/api-11870/'
      SERVICE_DESCRIPTION = ''
 
-     def self.search(lat, lon, radius, options) 
+     def self.find(lat, lon, radius, options) 
 
        auth = options.delete(:auth)
        raise Gigante::Errors::ServiceForbidden, "You must supply an app key and an app secret for 11870 via the auth hash" unless (auth and auth[:app_key] and auth[:app_secret])
@@ -29,8 +32,7 @@ module Gigante
        
        results = build_results(response)
    
-        
-       results  
+       return results  
      end
      
      def self.auth_sign(app_key, app_secret)
@@ -54,25 +56,29 @@ module Gigante
    
        results[:search][:status] = 'ok'
        results[:search][:results] = []
-       results[:search][:total_results] = r['feed']['entry'].size
+       
+       unless r['feed']['entry'].nil?
+         results[:search][:total_results] = r['feed']['entry'].size
        
 
-       r['feed']['entry'].each do |e|
-         lat, lon =  e['georss:where']['gml:Point']['gml:pos'].split(' ')
+         r['feed']['entry'].each do |e|
+           lat, lon =  e['georss:where']['gml:Point']['gml:pos'].split(' ')
          
-         node = {}
-         node[:lat]   = lat
-         node[:lon]   = lon
-         node[:title] = e['title']
+           node = {}
+           node[:lat]   = lat
+           node[:lon]   = lon
+           node[:title] = e['title']
          
-         u = e['link'].is_a?(Hash) ? e['link'] : e['link'].first
+           u = e['link'].is_a?(Hash) ? e['link'] : e['link'].first
          
-         node[:url] = u['href']
+           node[:url] = u['href']
          
-         results[:search][:results].push(node)
-        
+           results[:search][:results].push(node)
+         end
+       else
+         results[:search][:total_results] = 0   
        end
-       
+     
        return results
         
      end

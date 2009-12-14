@@ -12,12 +12,26 @@ module Gigante
       
       @available_services.each do |s|
         raise Gigante::Errors::ServiceNotImplemented unless Gigante::Services.constants.include?(s.capitalize)
-        raise Gigante::Errors::ServiceBadlyImplemented, "#{s.capitalize} lacks a search method" unless Gigante::Services.const_get(s.capitalize).respond_to?(:search)
+        raise Gigante::Errors::ServiceBadlyImplemented, "#{s.capitalize} lacks a find method" unless Gigante::Services.const_get(s.capitalize).respond_to?(:find)
       end
       
     end
     
-    def search(lat = '-5.851560', lon = '43.366241', radius = 1, services = nil, *options)
+    def self.available_services
+      Gigante::Services::AVAILABLE_SERVICES.sort
+    end
+    
+    def self.requires_auth?(service)
+      the_service =  Gigante::Services.const_get(service.capitalize)
+      the_service::AUTH_REQUIRED
+    end
+    
+    def self.required_auth_params(service)
+      the_service =  Gigante::Services.const_get(service.capitalize)
+      the_service::REQUIRED_AUTH_PARAMS
+    end
+    
+    def find(lat = '-5.851560', lon = '43.366241', radius = 1, services = nil, *options)
       @results = {}
       services ||= @available_services
       
@@ -34,11 +48,11 @@ module Gigante
         
         raise Gigante::Errors::ServiceAuthMissing, "#{s.capitalize} requires authorization, but none provided" unless ((options and options[:auth]) or (the_service::AUTH_REQUIRED == false))
         
-        results = the_service.search(lat, lon, radius, options)
+        results = the_service.find(lat, lon, radius, options)
         @results[s.to_sym] = results
       end
       
-      @results
+      @results.to_json
 
     end
     

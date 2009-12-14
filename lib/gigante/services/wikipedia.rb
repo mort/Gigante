@@ -10,7 +10,7 @@ module Gigante
       SERVICE_API_URL = 'http://www.geonames.org/export/wikipedia-webservice.html'
       SERVICE_DESCRIPTION = 'The free encyclopedia that anyone can edit.'
 
-      def self.search(lat, lon, radius, options = {}) 
+      def self.find(lat, lon, radius, options = {}) 
         url = "http://ws.geonames.org/findNearbyWikipedia?lat=#{lat}&lng=#{lon}&radius=#{radius}"
         response = HTTParty.get(url)
 
@@ -35,24 +35,40 @@ module Gigante
           results[:search][:status] = 'ok'
           
           unless response['geonames'].nil?
-            results[:search][:total_results] = response['geonames']['entry'].size
+            
             results[:search][:results] = []
+            
+            if response['geonames']['entry'].is_a?(Array)
+              results[:search][:total_results] = response['geonames']['entry'].size
+              
+              response['geonames']['entry'].each do |e|
+                node = {}
 
-            response['geonames']['entry'].each do |e|
-          
+                node[:lat]   = e['lat']
+                node[:lon]   = e['lng']
+                node[:title] = e['title']
+                node[:url]   = e['wikipediaUrl']
+
+                results[:search][:results].push(node)
+
+              end
+            elsif response['geonames']['entry'].is_a?(Hash)
               node = {}
-              node[:lat]   = e['lat']
-              node[:lon]   = e['lng']
-              node[:title] = e['title']
-              node[:url]   = e['wikipediaUrl']
-          
-              results[:search][:results].push(node)
+              
+              node[:lat]   = response['geonames']['entry']['lat']
+              node[:lon]   = response['geonames']['entry']['lng']
+              node[:title] = response['geonames']['entry']['title']
+              node[:url]   = response['geonames']['entry']['wikipediaUrl']
+
+              results[:search][:results].push(node)  
+              results[:search][:total_results] = 1
+              
             end
           else
             results[:search][:total_results] = 0
           end
 
-          return results.to_json
+          return results
 
 
         end
