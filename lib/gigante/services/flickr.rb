@@ -36,7 +36,8 @@ module Gigante
 
       def self.build_query_string(api_key, lat, lon, radius)
         
-         radius = 32 if (radius > 32)
+         # Max radius is 32 km  
+         radius = 32 if (radius.to_i > 32)
         
          query_params = {}
           query_params[:method] = 'flickr.photos.search'
