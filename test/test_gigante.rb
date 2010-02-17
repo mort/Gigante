@@ -106,8 +106,26 @@ class TestGigante < Test::Unit::TestCase
     should 'return a hash that contains the results for that service' do
       assert @results[:results][:flickr] == 'foo', @results.inspect
     end
-  
-    
+
   end
+  
+  context 'two consecutive valid searches' do
+   setup do
+     options = {}
+     options[:flickr] = {:auth => 'foo'}
+     @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
+     Gigante::Services::AVAILABLE_SERVICES = %w(flickr)
+     mock(Gigante::Services::Flickr).find(@lat,@lon,@radius, options[:flickr]) { 'foo' }.twice 
+     @g = Gigante::Search.new(options)
+     2.times { @results = @g.find(@lat,@lon,@radius) }
+   end
+
+
+   should 'be a hash the second time' do
+     assert @results.is_a?(Hash)
+   end
+
+  end
+     
  
 end

@@ -18,11 +18,11 @@ module Gigante
 
      def self.find(lat, lon, radius, options) 
 
-       auth = options.delete(:auth)
+       auth = options[:auth]
        raise Gigante::Errors::ServiceForbidden, "You must supply an app key and an app secret for 11870 via the auth hash" unless (auth and auth[:app_key] and auth[:app_secret])
 
-       app_key = auth.delete(:app_key)
-       app_secret = auth.delete(:app_secret)
+       app_key = auth[:app_key]
+       app_secret = auth[:app_secret]
        
        authSign = auth_sign(app_key, app_secret)
        

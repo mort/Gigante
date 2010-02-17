@@ -2,7 +2,7 @@ module Gigante
   module Services
     class Flickr
       include ClassMethods
-
+      require 'rubygems'
       require 'base58'
 
       AUTH_REQUIRED = true
@@ -16,10 +16,10 @@ module Gigante
 
       def self.find(lat, lon, radius, options) 
 
-        auth = options.delete(:auth)
+        auth = options[:auth]
         raise Gigante::Errors::ServiceForbidden, "You must supply a Flickr API key via the auth hash" unless (auth and auth[:api_key])
 
-        api_key = auth.delete(:api_key)
+        api_key = auth[:api_key]
 
         query_string = build_query_string(api_key, lat, lon, radius)
 
@@ -36,7 +36,7 @@ module Gigante
 
       def self.build_query_string(api_key, lat, lon, radius)
         
-         radius = 32 if (radius > 32)
+         radius = 32 if (radius.to_f > 32.0)
         
          query_params = {}
           query_params[:method] = 'flickr.photos.search'

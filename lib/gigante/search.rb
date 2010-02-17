@@ -37,22 +37,17 @@ module Gigante
       @results[:meta][:parameters] = {:lat => lat, :lon => lon, :radius => radius}
       @results[:results] = {}
       
-      
       services ||= @available_services
       
       services.each do |s|
         raise Gigante::Errors::UnknownService, "Service #{s} is unknown" unless @available_services.include?(s)
       end
       
-      
       services.each do |s|
-        
-        options = @options.delete(s.to_sym)
+        options = @options[s.to_sym]
         
         the_service =  Gigante::Services.const_get(s.capitalize)
-        
         raise Gigante::Errors::ServiceAuthMissing, "#{s.capitalize} requires authorization, but none provided" unless ((options and options[:auth]) or (the_service::AUTH_REQUIRED == false))
-        
         results = the_service.find(lat, lon, radius, options)
         @results[:results][s.to_sym] = results
       end

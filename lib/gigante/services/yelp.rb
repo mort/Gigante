@@ -13,9 +13,9 @@ module Gigante
        SERVICE_DESCRIPTION = 'Real people. Real reviews.'
 
        def self.find(lat, lon, radius, options)
-         auth = options.delete(:auth)
+         auth = options[:auth]
          raise Gigante::Errors::ServiceForbidden, "You must supply a Yelp API key via the auth hash" unless (auth and auth[:api_key])
-         api_key = auth.delete(:api_key)
+         api_key = auth[:api_key]
          
          url = "http://api.yelp.com/business_review_search?term=yelp&lat=#{lat}&long=#{lon}&radius=#{radius}&num_biz_requested=20&ywsid=#{api_key}"
          response = HTTParty.get(url)
