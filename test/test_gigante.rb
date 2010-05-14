@@ -36,7 +36,7 @@ class TestGigante < Test::Unit::TestCase
     end
     
     should 'have a search method' do
-      assert @g.respond_to?(:find)
+      assert @g.respond_to?(:query)
     end
     
   end
@@ -50,7 +50,7 @@ class TestGigante < Test::Unit::TestCase
     should 'raise an UnknownService exception' do
       assert_raise Gigante::Errors::UnknownService do
         @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
-        @results = @g.find(@lat,@lon,@radius,['wadus'])
+        @results = @g.query(@lat,@lon,@radius,['wadus'])
       end
     end
     
@@ -65,7 +65,7 @@ class TestGigante < Test::Unit::TestCase
     should 'raise a ServiceAuthMissing exception' do
       assert_raise Gigante::Errors::ServiceAuthMissing do
         @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
-        @results = @g.find(@lat,@lon,@radius,['flickr'])
+        @results = @g.query(@lat,@lon,@radius,['flickr'])
       end
     end
     
@@ -77,14 +77,14 @@ class TestGigante < Test::Unit::TestCase
       options[:flickr] = {:auth => 'foo'}
       @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
       Gigante::Services::AVAILABLE_SERVICES = %w(flickr)
-      mock(Gigante::Services::Flickr).find(@lat,@lon,@radius, options[:flickr]) { 'foo' } 
+      mock(Gigante::Services::Flickr).query(@lat,@lon,@radius, options[:flickr]) { 'foo' } 
       @g = Gigante::Search.new(options)
-      @results = @g.find(@lat,@lon,@radius)
+      @results = @g.query(@lat,@lon,@radius)
     end
     
     
     should 'be a hash' do
-      assert @results.is_a?(Hash)
+      assert @results.is_a?(Hash), "#{@results.class.to_s}"
     end
     
     should 'return info about the search' do
@@ -94,6 +94,10 @@ class TestGigante < Test::Unit::TestCase
     should 'return search results' do
       assert @results.keys.include?(:results)
     end
+    
+    should 'return the total number of results' do
+      assert @results[:meta].keys.include?(:total_results)
+    end 
     
     should 'return coordinates and radius' do
       assert @results[:meta][:parameters] ==  {:lat => '-5.851560', :lon => '43.366241', :radius => 1}, @results[:meta].inspect
@@ -106,6 +110,7 @@ class TestGigante < Test::Unit::TestCase
     should 'return a hash that contains the results for that service' do
       assert @results[:results][:flickr] == 'foo', @results.inspect
     end
+    
 
   end
   
@@ -115,9 +120,9 @@ class TestGigante < Test::Unit::TestCase
      options[:flickr] = {:auth => 'foo'}
      @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
      Gigante::Services::AVAILABLE_SERVICES = %w(flickr)
-     mock(Gigante::Services::Flickr).find(@lat,@lon,@radius, options[:flickr]) { 'foo' }.twice 
+     mock(Gigante::Services::Flickr).query(@lat,@lon,@radius, options[:flickr]) { 'foo' }.twice 
      @g = Gigante::Search.new(options)
-     2.times { @results = @g.find(@lat,@lon,@radius) }
+     2.times { @results = @g.query(@lat,@lon,@radius) }
    end
 
 

@@ -7,7 +7,7 @@ class TestServiceFlickr < Test::Unit::TestCase
     should 'raise an exception' do
       assert_raise Gigante::Errors::ServiceForbidden do
         @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
-        Gigante::Services::Flickr.find(@lat,@lon,@radius,{})
+        Gigante::Services::Flickr.query(@lat,@lon,@radius,{})
       end
     end
   
@@ -21,7 +21,7 @@ class TestServiceFlickr < Test::Unit::TestCase
       @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
       url = "http://api.flickr.com/services/rest/?api_key=wadus&extras=geo&format=json&lat=#{@lat}&lon=#{@lon}&method=flickr.photos.search&nojsoncallback=1&radius=#{@radius}"
       mock(HTTParty).get(url){response}
-      @results = Gigante::Services::Flickr.find(@lat, @lon, @radius, :auth => {:api_key => 'wadus'})
+      @results = Gigante::Services::Flickr.query(@lat, @lon, @radius, :auth => {:api_key => 'wadus'})
     end
 
     should 'return results' do
@@ -76,7 +76,7 @@ class TestServiceFlickr < Test::Unit::TestCase
       @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
       url = "http://api.flickr.com/services/rest/?api_key=wadus&extras=geo&format=json&lat=#{@lat}&lon=#{@lon}&method=flickr.photos.search&nojsoncallback=1&radius=#{@radius}"
       mock(HTTParty).get(url){response}
-      @results = Gigante::Services::Flickr.find(@lat, @lon, @radius, :auth => {:api_key => 'wadus'})
+      @results = Gigante::Services::Flickr.query(@lat, @lon, @radius, :auth => {:api_key => 'wadus'})
     end
 
     should 'return results' do

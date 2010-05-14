@@ -16,7 +16,7 @@ module Gigante
      SERVICE_API_URL = 'http://code.google.com/p/api-11870/'
      SERVICE_DESCRIPTION = ''
 
-     def self.find(lat, lon, radius, options) 
+     def self.query(lat, lon, radius, options) 
 
        auth = options[:auth]
        raise Gigante::Errors::ServiceForbidden, "You must supply an app key and an app secret for 11870 via the auth hash" unless (auth and auth[:app_key] and auth[:app_secret])

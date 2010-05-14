@@ -13,7 +13,7 @@ class TestServiceWikipedia < Test::Unit::TestCase
       @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
       url = "http://ws.geonames.org/findNearbyWikipedia?lat=#{@lat}&lng=#{@lon}&radius=#{@radius}"
       mock(HTTParty).get(url){response}
-      @results = Gigante::Services::Wikipedia.find(@lat, @lon, @radius)
+      @results = Gigante::Services::Wikipedia.query(@lat, @lon, @radius)
     end
     
      should 'return results' do
@@ -64,7 +64,7 @@ class TestServiceWikipedia < Test::Unit::TestCase
       @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
       url = "http://ws.geonames.org/findNearbyWikipedia?lat=#{@lat}&lng=#{@lon}&radius=#{@radius}"
       mock(HTTParty).get(url){response}
-      @results = Gigante::Services::Wikipedia.find(@lat, @lon, @radius)
+      @results = Gigante::Services::Wikipedia.query(@lat, @lon, @radius)
     end
 
     should 'return results' do
@@ -155,7 +155,7 @@ class TestServiceWikipedia < Test::Unit::TestCase
       @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
       url = "http://ws.geonames.org/findNearbyWikipedia?lat=#{@lat}&lng=#{@lon}&radius=#{@radius}"
       mock(HTTParty).get(url){response}
-      @results = Gigante::Services::Wikipedia.find(@lat, @lon, @radius)
+      @results = Gigante::Services::Wikipedia.query(@lat, @lon, @radius)
       
     end
 

@@ -7,7 +7,7 @@ class TestServiceOos < Test::Unit::TestCase
     should 'raise an exception' do
       assert_raise Gigante::Errors::ServiceForbidden do
         @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
-        Gigante::Services::Oos.find(@lat,@lon,@radius,{})
+        Gigante::Services::Oos.query(@lat,@lon,@radius,{})
       end
     end
   
@@ -27,7 +27,7 @@ class TestServiceOos < Test::Unit::TestCase
          url = "http://11870.com/api/v1/search?lat=#{lat}&lon=#{lon}&radius=#{radius}&appToken=#{app_key}&authSign=wadus"
          mock(HTTParty).get(url){response}
 
-         @results = Gigante::Services::Oos.find(lat, lon, radius, :auth => {:app_key => app_key, :app_secret => app_secret})
+         @results = Gigante::Services::Oos.query(lat, lon, radius, :auth => {:app_key => app_key, :app_secret => app_secret})
       end
    
        should 'return results' do
@@ -87,7 +87,7 @@ class TestServiceOos < Test::Unit::TestCase
       url = "http://11870.com/api/v1/search?lat=#{lat}&lon=#{lon}&radius=#{radius}&appToken=#{app_key}&authSign=wadus"
       mock(HTTParty).get(url){response}
 
-      @results = Gigante::Services::Oos.find(lat, lon, radius, :auth => {:app_key => app_key, :app_secret => app_secret})
+      @results = Gigante::Services::Oos.query(lat, lon, radius, :auth => {:app_key => app_key, :app_secret => app_secret})
     end
 
     should 'return results' do

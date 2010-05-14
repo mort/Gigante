@@ -12,7 +12,7 @@ module Gigante
       
       @available_services.each do |s|
         raise Gigante::Errors::ServiceNotImplemented unless Gigante::Services.constants.include?(s.capitalize)
-        raise Gigante::Errors::ServiceBadlyImplemented, "#{s.capitalize} lacks a find method" unless Gigante::Services.const_get(s.capitalize).respond_to?(:find)
+        raise Gigante::Errors::ServiceBadlyImplemented, "#{s.capitalize} lacks a find method" unless Gigante::Services.const_get(s.capitalize).respond_to?(:query)
       end
       
     end
@@ -31,10 +31,11 @@ module Gigante
       the_service::REQUIRED_AUTH_PARAMS
     end
     
-    def find(lat = '-5.851560', lon = '43.366241', radius = 1, services = nil, *options)
+    def query(lat = '-5.851560', lon = '43.366241', radius = 1, services = nil, *options)
       @results = {}
       @results[:meta] = {}
       @results[:meta][:parameters] = {:lat => lat, :lon => lon, :radius => radius}
+      @results[:meta][:total_results] = 0
       @results[:results] = {}
       
       services ||= @available_services
@@ -48,11 +49,13 @@ module Gigante
         
         the_service =  Gigante::Services.const_get(s.capitalize)
         raise Gigante::Errors::ServiceAuthMissing, "#{s.capitalize} requires authorization, but none provided" unless ((options and options[:auth]) or (the_service::AUTH_REQUIRED == false))
-        results = the_service.find(lat, lon, radius, options)
+        results = the_service.query(lat, lon, radius, options)
         @results[:results][s.to_sym] = results
+        @results[:meta][:total_results] += results[:search][:total_results].to_i unless (results[:search].nil? || results[:search][:total_results].nil?)
       end
+            
+      return @results      
       
-      @results
     end
     
   end

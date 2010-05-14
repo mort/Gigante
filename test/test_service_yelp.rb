@@ -8,7 +8,7 @@ class TestServiceYelp < Test::Unit::TestCase
     should 'raise an exception' do
       assert_raise Gigante::Errors::ServiceForbidden do
         @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
-        Gigante::Services::Yelp.find(@lat,@lon,@radius,{})
+        Gigante::Services::Yelp.query(@lat,@lon,@radius,{})
       end
     end
   
@@ -20,7 +20,7 @@ class TestServiceYelp < Test::Unit::TestCase
       @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
       url = "http://api.yelp.com/business_review_search?term=yelp&lat=#{@lat}&long=#{@lon}&radius=#{@radius}&num_biz_requested=20&ywsid=wadus"
       mock(HTTParty).get(url){response}
-      @results = Gigante::Services::Yelp.find(@lat, @lon, @radius, :auth => {:api_key => 'wadus'})
+      @results = Gigante::Services::Yelp.query(@lat, @lon, @radius, :auth => {:api_key => 'wadus'})
     end
 
     should 'return results' do
@@ -73,7 +73,7 @@ class TestServiceYelp < Test::Unit::TestCase
       @lat, @lon, @radius = ['-5.851560', '43.366241', 1]
       url = "http://api.yelp.com/business_review_search?term=yelp&lat=#{@lat}&long=#{@lon}&radius=#{@radius}&num_biz_requested=20&ywsid=wadus"
       mock(HTTParty).get(url){response}
-      @results = Gigante::Services::Yelp.find(@lat, @lon, @radius, :auth => {:api_key => 'wadus'})
+      @results = Gigante::Services::Yelp.query(@lat, @lon, @radius, :auth => {:api_key => 'wadus'})
     end
 
     should 'return results' do

@@ -14,7 +14,7 @@ module Gigante
       SERVICE_API_URL = 'http://www.flickr.com/services/api/'
       SERVICE_DESCRIPTION = 'Almost certainly the best online photo management and sharing application in the world'
 
-      def self.find(lat, lon, radius, options) 
+      def self.query(lat, lon, radius, options) 
 
         auth = options[:auth]
         raise Gigante::Errors::ServiceForbidden, "You must supply a Flickr API key via the auth hash" unless (auth and auth[:api_key])
@@ -28,7 +28,7 @@ module Gigante
 
         results = build_results(response)
     
-        return results
+        results
 
       end
 
@@ -70,6 +70,8 @@ module Gigante
     
         results[:search][:status] = 'ok'
     
+        results[:search][:total_results] = 0
+    
         results[:search][:total_results] = r['photos']['total']
         results[:search][:results] = []
     
@@ -89,7 +91,7 @@ module Gigante
           results[:search][:results].push(node)
       
         end
-    
+        
         return results
     
     
