@@ -47,6 +47,7 @@ module Gigante
           query_params[:extras] = 'geo'
           query_params[:format] = 'json'
           query_params[:nojsoncallback] = 1
+          query_params[:min_taken_date] = '2009-12-31'
 
           query_string = query_params.map do |k,v|
             "#{k}=#{v}"
