@@ -21,9 +21,9 @@ module Gigante
 
         api_key = auth[:api_key]
 
-        query_string = build_query_string(api_key, lat, lon, radius)
+        query_string = build_query_string(api_key, lat, lon, radius, options[:query])
 
-        url = "http://api.flickr.com/services/rest/?#{query_string}"
+        puts url = "http://api.flickr.com/services/rest/?#{query_string}"
         response = HTTParty.get(url)
 
         results = build_results(response)
@@ -34,26 +34,28 @@ module Gigante
 
       private
 
-      def self.build_query_string(api_key, lat, lon, radius)
+      def self.build_query_string(api_key, lat, lon, radius, options = nil)
         
-         radius = 32 if (radius.to_f > 32.0)
+        radius = 32 if (radius.to_f > 32.0)
         
-         query_params = {}
-          query_params[:method] = 'flickr.photos.search'
-          query_params[:api_key] = api_key
-          query_params[:lat] = lat
-          query_params[:lon] = lon
-          query_params[:radius] = radius
-          query_params[:extras] = 'geo'
-          query_params[:format] = 'json'
-          query_params[:nojsoncallback] = 1
-          query_params[:min_taken_date] = '2009-12-31'
+        query_params = {}
+        query_params[:method] = 'flickr.photos.search'
+        query_params[:api_key] = api_key
+        #query_params[:lat] = lat
+        #query_params[:lon] = lon
+        #query_params[:radius] = radius
+        query_params[:extras] = 'geo'
+        query_params[:format] = 'json'
+        query_params[:nojsoncallback] = 1
+          
+        query_params.merge!(options) if options.is_a?(Hash)
+          
+        query_string = query_params.map do |k,v|
+          "#{k}=#{v}"
+        end.sort.join('&')
 
-          query_string = query_params.map do |k,v|
-            "#{k}=#{v}"
-          end.sort.join('&')
-
-          query_string
+        query_string
+      
       end
   
       def self.build_results(response)

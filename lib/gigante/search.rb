@@ -31,7 +31,7 @@ module Gigante
       the_service::REQUIRED_AUTH_PARAMS
     end
     
-    def query(lat = '-5.851560', lon = '43.366241', radius = 1, services = nil, *options)
+    def query(lat = '-5.851560', lon = '43.366241', radius = 1, services = nil, runtime_options = nil)
       @results = {}
       @results[:meta] = {}
       @results[:meta][:parameters] = {:lat => lat, :lon => lon, :radius => radius}
@@ -46,7 +46,7 @@ module Gigante
       
       services.each do |s|
         options = @options[s.to_sym]
-        
+        options.merge!(runtime_options[s.to_sym]) if runtime_options.is_a?(Hash) && runtime_options.has_key?(s.to_sym)
         the_service =  Gigante::Services.const_get(s.capitalize)
         raise Gigante::Errors::ServiceAuthMissing, "#{s.capitalize} requires authorization, but none provided" unless ((options and options[:auth]) or (the_service::AUTH_REQUIRED == false))
         results = the_service.query(lat, lon, radius, options)

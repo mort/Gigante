@@ -26,11 +26,24 @@ module Gigante
        
        authSign = auth_sign(app_key, app_secret)
        
-       url = "http://11870.com/api/v1/search?lat=#{lat}&lon=#{lon}&radius=#{radius}&appToken=#{app_key}&authSign=#{authSign}"
-
+      #url = "http://11870.com/api/v1/search?lat=#{lat}&lon=#{lon}&radius=#{radius}&appToken=#{app_key}&authSign=#{authSign}"
+       url =   "http://11870.com/api/v1/search?appToken=#{app_key}&authSign=#{authSign}"
+      
+       if options.has_key?(:query)
+         query_string = options[:query].map do |k,v|
+           "#{k}=#{v}"
+          end.sort.join('&')
+          
+          url = url << "&#{query_string}"
+          puts url 
+       end
+       
        response = HTTParty.get(url) 
        
        results = build_results(response)
+       results[:meta][:query_url] = url
+       results[:meta][:query_params] = options[:query] if options.has_key?(:query)
+       
    
        return results  
      end
@@ -62,8 +75,15 @@ module Gigante
        
 
          r['feed']['entry'].each do |e|
+           begin
+           puts e.inspect
+           puts e['georss:where'].inspect
+           puts e['georss:where']['gml:Point'].inspect
+           puts e['georss:where']['gml:Point']['gml:pos'].inspect
+           puts e['georss:where']['gml:Point']['gml:pos'].split(' ').inspect
            lat, lon =  e['georss:where']['gml:Point']['gml:pos'].split(' ')
-         
+           puts lat
+           puts lon
            node = {}
            node[:lat]   = lat
            node[:lon]   = lon
@@ -74,6 +94,10 @@ module Gigante
            node[:url] = u['href']
          
            results[:search][:results].push(node)
+          rescue TypeError
+            puts "Error en"
+            puts e.inspect
+          end
          end
        else
          results[:search][:total_results] = 0   
